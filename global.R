@@ -1,4 +1,4 @@
-###if it doenst run first run inst.R
+
 
 library(shiny)
 library(xgboost)
@@ -15,10 +15,10 @@ irisClass <- xgb.load("Iris model")
 load("irisClassinfo.rda")
 
 
-generatepreds <- function(Sepal.Width, Petal.Length, Petal.Width, Sepal.Length) {
+generatepreds <- function(Petal.Length, Sepal.Width, Petal.Width, Sepal.Length) {
  
-  testDF <- as.matrix(Petal.Length, Petal.Width, Sepal.Length, Sepal.Width) 
-  ## I can change what input changes the pred values table by changing the order of values in testDF. Right now 'Petal.Length' changes the input, but if 'Sepal.Width' was first then the pred table would change when the 'Sepal.Width' slider input changed. Don't know how to fix it. 
+  testDF <- matrix(Petal.Length, Petal.Width,  Sepal.Width, Sepal.Length) 
+  ## All input change the pred table, but sometimes there are multiple rows of the same Species/pred 
   
   preds <- predict(irisClass, testDF) 
   
@@ -44,7 +44,7 @@ params <- list(
   , "max_depth" = 3
 )
 
-cv.nround = 500
+cv.nround = 300
 
 bst.cv <- xgb.cv(param = params, data = x, label = y
                  ,nfold = 5, nrounds = cv.nround
